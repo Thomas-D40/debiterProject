@@ -13,7 +13,7 @@ public class Facture {
 	private Long id;
 	
 	
-	@Column(name ="id_client")
+	@Column(name ="client_id")
 	private Long idClient;
 	
 	private Long amount;
@@ -41,6 +41,13 @@ public class Facture {
 	public void setAmount(Long amount) {
 		this.amount = amount;
 	}
+
+	@Override
+	public String toString() {
+		return "Facture [id=" + id + ", idClient=" + idClient + ", amount=" + amount + "]";
+	}
+	
+	
 	
 	
 

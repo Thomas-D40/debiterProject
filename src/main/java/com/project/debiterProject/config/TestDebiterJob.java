@@ -9,19 +9,13 @@ import javax.sql.DataSource;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
-import org.springframework.batch.core.scope.context.ChunkContext;
-import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JpaCursorItemReader;
 import org.springframework.batch.item.database.JpaItemWriter;
-import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -31,8 +25,6 @@ import org.springframework.stereotype.Component;
 import com.project.debiterProject.entity.Client;
 import com.project.debiterProject.entity.Facture;
 import com.project.debiterProject.processor.CreditingProcessor;
-
-import antlr.collections.List;
 
 @Component
 public class TestDebiterJob {
@@ -61,9 +53,8 @@ public class TestDebiterJob {
 	@Autowired
 	private JpaTransactionManager jpaTransactionManager;
 	
-	private Map<Long, Long> facturesMap = new HashMap<Long, Long>();
-	
-	
+	// Variable de stockage des factures pour déduction dans la second step	
+	private Map<Long, Long> facturesMap = new HashMap<Long, Long>();	
 	
 	
 	
@@ -100,7 +91,7 @@ public class TestDebiterJob {
 	
 	public ItemProcessor<Facture, Void> storingFacture() {
 		
-		ItemProcessor<Facture, Void> storingProcessor = new ItemProcessor<Facture, Void>() {
+		return new ItemProcessor<Facture, Void>() {
 
 			@Override
 			public Void process(Facture item) throws Exception {
@@ -108,20 +99,18 @@ public class TestDebiterJob {
 				return null;
 			}
 		};
-		return null;
+
 		
 	}
 	
 	public ItemWriter<Void> nothingToDo() {
-		ItemWriter<Void> nothingToDo = new ItemWriter<Void>() {
+		return new ItemWriter<Void>() {
 
 			@Override
 			public void write(java.util.List<? extends Void> items) throws Exception {
-				// TODO Auto-generated method stub
 				return;
 			}
 		};
-		return nothingToDo;
 	}
 	
 
@@ -144,13 +133,11 @@ public class TestDebiterJob {
 		jpaCursorItemReader.setEntityManagerFactory(bankEntityManagerFactory);
 		jpaCursorItemReader.setQueryString("From Client");
 		
-		System.out.println("Je suis là");
-		
 		return jpaCursorItemReader;
 	}
 	
 	public ItemProcessor<Client, Client> soldingAccount() {
-		ItemProcessor<Client, Client> soldingAccount = new ItemProcessor<Client, Client>() {
+		return new ItemProcessor<Client, Client>() {
 
 			@Override
 			public Client process(Client item) throws Exception {
@@ -159,13 +146,11 @@ public class TestDebiterJob {
 				client.setName(item.getName());
 				
 				Long amount = item.getAmount();
-				System.out.println(facturesMap.get(amount));
 				
 				Iterator iterator = facturesMap.entrySet().iterator();
 				
 				while (iterator.hasNext()) {
 					Map.Entry<Long, Long> m = (Map.Entry<Long, Long>) iterator.next();
-					System.out.println(m.getValue());
 					if (m.getKey() == item.getId()) {
 						amount = amount - m.getValue();
 					}
@@ -174,13 +159,12 @@ public class TestDebiterJob {
 				
 				client.setAmount(amount);
 				
+				System.out.println(("Le client " + client.getName() + " a désormais " + client.getAmount() + "€ sur son compte."));
 				
-				System.out.println("I'm here!");
+				
 				return client;
 			}
 		};
-		
-		return soldingAccount;
 	}
 	
 	public JpaCursorItemReader<Client> facturesJpaCursorItemReader() {
