@@ -7,7 +7,8 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @EnableBatchProcessing
-@ComponentScan({"com.project.debiterProject.config","com.project.debiterProject.processor","com.project.debiterProject.entity"})
+@ComponentScan({"com.project.debiterProject.config","com.project.debiterProject.processor","com.project.debiterProject.entity",
+	"com.project.debiterProject.reader", "com.project.debiterProject.writer"})
 public class DebiterProjectApplication {
 
 	public static void main(String[] args) {
