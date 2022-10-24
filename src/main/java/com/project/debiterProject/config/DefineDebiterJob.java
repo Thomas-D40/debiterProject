@@ -21,7 +21,7 @@ import com.project.debiterProject.reader.JpaCursorReader;
 import com.project.debiterProject.writer.JpaWriter;
 
 @Component
-public class TestDebiterJob {
+public class DefineDebiterJob {
 	
 	@Autowired
 	private JobBuilderFactory jobBuilderFactory;
@@ -85,7 +85,7 @@ public class TestDebiterJob {
 	
 	// Debiting 
 	public Step debitionStep() {
-		return stepBuilderFactory.get("first step")
+		return stepBuilderFactory.get("debiting account")
 				.<Client, Client>chunk(10)
 				.reader(jpaCursorReader.clientJpaCursorItemReader())				
 				.processor(processors.soldingAccount())
