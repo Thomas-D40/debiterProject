@@ -3,10 +3,10 @@ package com.project.debiterProject.service;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.batch.runtime.JobExecution;
 
 import org.springframework.batch.core.Entity;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.launch.JobLauncher;
@@ -33,8 +33,8 @@ public class DebiterJobScheduler {
 		JobParameters jobParameters = new JobParameters(params);
 
 		try {
-			JobExecution jobExecution = (JobExecution) jobLauncher.run(debiterJob, jobParameters);
-			System.out.println("Job Execution ID = " + ((Entity) jobExecution).getId());
+			JobExecution jobExecution = jobLauncher.run(debiterJob, jobParameters);
+			System.out.println("Job Execution ID = " + (jobExecution).getId());
 		} catch (Exception e) {
 			System.out.println("Exception while starting job");
 		}
