@@ -14,7 +14,8 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.stereotype.Component;
 
 import com.project.debiterProject.entity.Client;
-import com.project.debiterProject.entity.Invoice;
+import com.project.debiterProject.entity.PaidInvoice;
+import com.project.debiterProject.entity.UnpaidInvoice;
 import com.project.debiterProject.processor.Processors;
 import com.project.debiterProject.reader.JpaCursorReader;
 import com.project.debiterProject.writer.JpaWriter;
@@ -67,7 +68,7 @@ public class DefineDebiterJob {
 	
 	public Step retrievingFacture() {
 		return stepBuilderFactory.get("retrieving factures")
-				.<Invoice, Invoice>chunk(10)
+				.<UnpaidInvoice, PaidInvoice>chunk(10)
 				.reader(jpaCursorReader.factureJpaCursorItemReader())
 				.processor(processors.storingInvoice())
 				.writer(jpaWriter.invoiceJpaItemWriter())

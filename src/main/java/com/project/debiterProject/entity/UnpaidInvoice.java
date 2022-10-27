@@ -6,8 +6,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="invoices")
-public class Invoice {
+@Table(name="unpaid_invoices")
+public class UnpaidInvoice {
 	
 	@Id
 	private Long id;
@@ -18,8 +18,6 @@ public class Invoice {
 	
 	private Long amount;
 	
-	@Column(name="paid")
-	private boolean isPaid;
 	
 	
 
@@ -47,17 +45,10 @@ public class Invoice {
 		this.amount = amount;
 	}
 
-	public boolean isPaid() {
-		return isPaid;
-	}
-
-	public void setPaid(boolean isPaid) {
-		this.isPaid = isPaid;
-	}
 
 	@Override
 	public String toString() {
-		return "Invoice [id=" + id + ", idClient=" + idClient + ", amount=" + amount + ", isPaid=" + isPaid + "]";
+		return "Invoice [id=" + id + ", idClient=" + idClient + ", amount=" + amount + "]";
 	}
 
 	

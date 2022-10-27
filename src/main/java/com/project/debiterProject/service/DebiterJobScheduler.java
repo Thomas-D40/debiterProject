@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-import org.springframework.batch.core.Entity;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameter;

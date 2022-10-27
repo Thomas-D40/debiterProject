@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.project.debiterProject.entity.Client;
-import com.project.debiterProject.entity.Invoice;
+import com.project.debiterProject.entity.PaidInvoice;
 
 @Component
 public class JpaWriter {
@@ -19,8 +19,8 @@ public class JpaWriter {
 	private EntityManagerFactory bankEntityManagerFactory;
 	
 	
-	public JpaItemWriter<Invoice> invoiceJpaItemWriter() {
-		JpaItemWriter<Invoice> jpaItemWriter = new JpaItemWriter<>();
+	public JpaItemWriter<PaidInvoice> invoiceJpaItemWriter() {
+		JpaItemWriter<PaidInvoice> jpaItemWriter = new JpaItemWriter<>();
 		jpaItemWriter.setEntityManagerFactory(bankEntityManagerFactory);
 		
 		return jpaItemWriter;

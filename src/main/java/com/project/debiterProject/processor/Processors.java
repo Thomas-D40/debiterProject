@@ -8,7 +8,8 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
 import com.project.debiterProject.entity.Client;
-import com.project.debiterProject.entity.Invoice;
+import com.project.debiterProject.entity.PaidInvoice;
+import com.project.debiterProject.entity.UnpaidInvoice;
 
 @Component
 public class Processors {
@@ -17,25 +18,22 @@ public class Processors {
 		private Map<Long, Long> invoicesMap = new HashMap<Long, Long>();
 		
 		
-		public ItemProcessor<Invoice, Invoice> storingInvoice() {
+		public ItemProcessor<UnpaidInvoice, PaidInvoice> storingInvoice() {
 			
-			return new ItemProcessor<Invoice, Invoice>() {
+			return new ItemProcessor<UnpaidInvoice, PaidInvoice>() {
 
 				@Override
-				public Invoice process(Invoice item) throws Exception {
+				public PaidInvoice process(UnpaidInvoice item) throws Exception {
 					System.out.println(item.toString());
-					Invoice invoice = new Invoice();
-					invoice.setAmount(item.getAmount());
-					invoice.setId(item.getId());
-					invoice.setIdClient(item.getIdClient());
-					invoice.setPaid(item.isPaid());
-					
-					if (invoice.isPaid() == false) {
+					PaidInvoice paidInvoice = new PaidInvoice();
+					paidInvoice.setAmount(item.getAmount());
+					paidInvoice.setId(item.getId());
+					paidInvoice.setIdClient(item.getIdClient());								
+				
 					invoicesMap.put(item.getIdClient(), item.getAmount());
-					invoice.setPaid(true);
-					}
-					System.out.println(invoice);
-					return invoice;
+					
+					System.out.println(paidInvoice);
+					return paidInvoice;
 				}
 			};
 
