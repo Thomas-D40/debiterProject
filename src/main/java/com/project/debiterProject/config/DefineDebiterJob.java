@@ -14,8 +14,7 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.stereotype.Component;
 
 import com.project.debiterProject.entity.Client;
-import com.project.debiterProject.entity.Facture;
-import com.project.debiterProject.processor.CreditingProcessor;
+import com.project.debiterProject.entity.Invoice;
 import com.project.debiterProject.processor.Processors;
 import com.project.debiterProject.reader.JpaCursorReader;
 import com.project.debiterProject.writer.JpaWriter;
@@ -30,9 +29,6 @@ public class DefineDebiterJob {
 	private StepBuilderFactory stepBuilderFactory;
 	
 
-
-	@Autowired
-	private CreditingProcessor creditingProcessor;
 	
 	@Autowired
 	@Qualifier("dataSource")
@@ -71,10 +67,11 @@ public class DefineDebiterJob {
 	
 	public Step retrievingFacture() {
 		return stepBuilderFactory.get("retrieving factures")
-				.<Facture, Void>chunk(10)
+				.<Invoice, Invoice>chunk(10)
 				.reader(jpaCursorReader.factureJpaCursorItemReader())
-				.processor(processors.storingFacture())
-				.writer(jpaWriter.nothingToDo())
+				.processor(processors.storingInvoice())
+				.writer(jpaWriter.invoiceJpaItemWriter())
+				.transactionManager(jpaTransactionManager)
 				.build();
 	}
 	
@@ -89,7 +86,7 @@ public class DefineDebiterJob {
 				.<Client, Client>chunk(10)
 				.reader(jpaCursorReader.clientJpaCursorItemReader())				
 				.processor(processors.soldingAccount())
-				.writer(jpaWriter.jpaItemWriter())
+				.writer(jpaWriter.clientJpaItemWriter())
 				.transactionManager(jpaTransactionManager)
 				.build();
 	}

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.project.debiterProject.entity.Client;
-import com.project.debiterProject.entity.Facture;
+import com.project.debiterProject.entity.Invoice;
 
 @Component
 public class JpaCursorReader {
@@ -17,13 +17,12 @@ public class JpaCursorReader {
 	@Qualifier("bankEntityManagerFactory")
 	private EntityManagerFactory bankEntityManagerFactory;
 	
-	public JpaCursorItemReader<Facture> factureJpaCursorItemReader() {
-		JpaCursorItemReader<Facture> factureJpaCursorItemReader = new JpaCursorItemReader<>();
+	public JpaCursorItemReader<Invoice> factureJpaCursorItemReader() {
+		JpaCursorItemReader<Invoice> factureJpaCursorItemReader = new JpaCursorItemReader<>();
 		
 		factureJpaCursorItemReader.setEntityManagerFactory(bankEntityManagerFactory);
-		factureJpaCursorItemReader.setQueryString("From Facture");
-		
-		System.out.println("Je suis là");
+		factureJpaCursorItemReader.setQueryString("From Invoice");
+
 		
 		return factureJpaCursorItemReader;
 	}
